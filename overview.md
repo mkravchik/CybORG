@@ -244,6 +244,9 @@ abstract class BaseWrapper{
 
 class EnumActionWrapper
 class FixedFlatWrapper
+class TrueTableWrapper
+class BlueTableWrapper
+class RedTableWrapper
 
 abstract class OpenAI.Env{
     +step
@@ -270,8 +273,24 @@ note top of FixedFlatWrapper
     Transforms the observation into a huge vector
 end note
 
+note top of TrueTableWrapper
+    Transforms the observation into a small simplified table
+end note
+
+note top of BlueTableWrapper
+    Transforms the observation into a small simplified table/vector
+    The vector represents just the exploitation state of the host and not its properties
+end note
+
+note top of RedTableWrapper
+    Similar to BlueTableWrapper, but from the red perspective
+end note
+
 BaseWrapper <|-- EnumActionWrapper
 BaseWrapper <|-- FixedFlatWrapper
+BaseWrapper <|-- TrueTableWrapper
+BaseWrapper <|-- BlueTableWrapper
+BaseWrapper <|-- RedTableWrapper
 BaseWrapper <|-- OpenAIGymWrapper
 OpenAI.Env <|-- OpenAIGymWrapper
 
