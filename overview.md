@@ -359,7 +359,7 @@ I will try to make sense of different pieces of the state and show how they can 
 | default_permissions |Allows/denies access to certain files| Can indicate  compromise of sensitive files|
 | last_modified_time | | Can indicate  compromise of sensitive files
 | **Process fields** |
-| name | 
+| name | | | Used to detect new processes | 
 | pid  | Used to kill processes | Used to kill processes | | Is inherent to the host simulation, but not sure is useful to understand WHAT ACTION to take, rather HOW to perform it.
 | ppid | | Can be used to detect rogue processes |
 | program | | | | Looks like part of the infromational model, used in 1 exploit only to spawn a specific process 
