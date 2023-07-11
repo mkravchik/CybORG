@@ -328,3 +328,49 @@ note left: 5. Calculate rewards
 deactivate SimulationController
 @enduml
 ```
+
+# What representation is sufficient?
+While CybORG goes very far in trying to collect every possible detail, exposing all the details in observation makes the problem untractable.
+
+The job of deciding how te represent the observation belongs to the Wrappers, specifically to FixedFlatWrapper (exposes everything) and BlueTableWrapper (smart compact representation)
+
+I will try to make sense of different pieces of the state and show how they can be used and how BlueTableWrapper uses them.
+
+| Field | Meaning for Red | Meaning for Blue | Use in BlueTableWrapper | Notes |
+|-------|-----------------|------------------|-------------------------|---|
+| **Host fields** |
+| os_type | Can run on/infect? | Is vulnerable for the particular kind of exploit? How to collect information/execute actions?| | Used in decoys as well
+| version | Can run on/infect? | Is vulnerable for the particular kind of exploit? | | Used in decoys as well
+| kernel | Can run on/infect? | Is vulnerable for the particular kind of exploit? |  |Used in decoys as well
+| patches | Can run on/infect? | Is vulnerable for the particular kind of exploit? | | Used in decoys as well
+| hostname | | | Identifying the host |
+| host_type | | | | host/drone
+| users | Can break into account? What priviledges will be achieved?| Is it a legitimate user on this system? | | Used in many exploits: SSHBruteForce.py, TomcatCredentialScanner.py, ...
+| **File fields** |
+| name |
+| path | Adds new files, checks for existing | Detects new suspicious files | Detects new files
+| file_type | Uses certain files for exploits ||| Used in exploits: NmapScan.py, LinuxKernelPrivilegeEscalation.py, ...
+| vendor |
+| version |
+| user | Allows/denies access to certain files| Can indicate  compromise of sensitive files|
+| user_permissions |Allows/denies access to certain files| Can indicate  compromise of sensitive files|
+| group |Allows/denies access to certain files| Can indicate  compromise of sensitive files|
+| group_permissions |Allows/denies access to certain files| Can indicate  compromise of sensitive files|
+| default_permissions |Allows/denies access to certain files| Can indicate  compromise of sensitive files|
+| last_modified_time | | Can indicate  compromise of sensitive files
+| **Process fields** |
+| name | 
+| pid  | Used to kill processes | Used to kill processes | | Is inherent to the host simulation, but not sure is useful to understand WHAT ACTION to take, rather HOW to perform it.
+| ppid | | Can be used to detect rogue processes |
+| program | | | | Looks like part of the infromational model, used in 1 exploit only to spawn a specific process 
+| user | Determines whether  the process can/should be attacked | Can be used to detect rogue processes | 
+| path |
+| open_ports | What is running? What can be attacked? How to communicate with C&C? | Any new ports open - intruder detection | Used non-directly in _interpret_connections| Used in decoys as well
+| decoy_type |
+| connections[] | What is running? What can be attacked? How to communicate with C&C? | Any new ports open - intruder detection | Used non-directly in _interpret_connections| Used in decoys as well
+| properties[] | Can this process be attacked? | Can this process be attacked? | | Used in HTTPRFI exploit|
+| **Credentials fields**| | | | Used in Scenario parsing
+| **VMImage fields** | | | | Used in Scenario parsing
+
+
+
