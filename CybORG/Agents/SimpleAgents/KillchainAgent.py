@@ -66,7 +66,8 @@ class KillchainAgent(BaseAgent):
             'TomcatCredentialScanner':{'agent':'Red', 'session':0, 'ip_address': IPv4Address('10.0.0.2'), 'port':8180},
             'TomcatExploit':{'agent':'Red', 'session':0, 'ip_address': IPv4Address('10.0.0.2'), 'port':8180,
                              'username':'tomcat', 'password':'tomcat'},
-            'UpgradeToMeterpreter': {'agent': 'Red', 'session': 0, 'target_session': 2}
+            'UpgradeToMeterpreter': {'agent': 'Red', 'session': 0, 'target_session': 2},
+            'MSFEternalBlue': {'agent': 'Red', 'session': 0, 'ip_address': IPv4Address('10.0.1.2')},
         }
 
         self.kchoice = random.choice(list(self.killchains.keys()))
