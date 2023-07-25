@@ -22,7 +22,7 @@ class HeuristicRed(BaseAgent):
         self.ip_map = {}
         self.ip_status = {}
 
-    def get_action(self,obs):
+    def get_action(self,obs, action_space: dict = None):
         success = obs['success']
         if success == False:
             # Needs to be failure first because unknown (initial obs) counts as true
@@ -139,3 +139,16 @@ class HeuristicRed(BaseAgent):
         else:
             raise NotImplementedError('Hostname missing from ip_map')
         return ip
+
+    def end_episode(self):
+        self.last_action = None
+        self.history = []
+        self.active_ip = None
+
+        self.known_subnets = set()
+        self.unexplored_subnets = set()
+        self.ip_map = {}
+        self.ip_status = {}
+
+    def set_initial_values(self, action_space, observation):
+        pass
