@@ -2,10 +2,11 @@ import random
 import inspect
 from os.path import dirname
 from pprint import pprint
+import argparse
 import sys
 from CybORG import CybORG
 from CybORG.Simulator.Scenarios import FileReaderScenarioGenerator
-from CybORG.Agents import B_lineAgent, KillchainAgent, RedMeanderAgent, BlueReactRemoveAgent, BlueReactRestoreAgent
+from CybORG.Agents import B_lineAgent, KillchainAgent, RedMeanderAgent, BlueReactRemoveAgent, BlueReactRestoreAgent, HeuristicRed
 from CybORG.Agents.Wrappers import RedTableWrapper, BlueTableWrapper, TrueTableWrapper
 from CybORG.Agents.Wrappers.TrueTableWrapper import true_obs_to_table
 
@@ -78,17 +79,26 @@ def run(env, agent, agent_color, steps):
 
 
 if __name__ == "__main__":
-    steps = 100
-    if len(sys.argv) > 1:
-        steps = int(sys.argv[1])
+    parser = argparse.ArgumentParser(description='Run CybORG')
+    parser.add_argument("-s", '--steps', type=int, default=100,
+                        help='Number of steps to run')
+    parser.add_argument("-b", "--blue_agent", help="BlueAgent class", default="BlueReactRemoveAgent")
+    parser.add_argument("-r", "--red_agent", help="RedAgent class", default="RedMeanderAgent")
+
+    args = parser.parse_args()
+
 
     path = inspect.getfile(CybORG)
     path = dirname(path) + f'/Simulator/Scenarios/scenario_files/Scenario1b.yaml'
     sg = FileReaderScenarioGenerator(path)
 
-    # agent = B_lineAgent()
-    # agent = KillchainAgent()
-    red_agent = RedMeanderAgent()
+    # create blue agent, the name of the class is in args.blue_agent
+    blue_agent_class = getattr(sys.modules[__name__], args.blue_agent)
+    blue_agent = blue_agent_class()
+
+    # create red agent, the name of the class is in args.red_agent
+    red_agent_class = getattr(sys.modules[__name__], args.red_agent)
+    red_agent = red_agent_class()
+
     env = CybORG(sg, agents={'Red':red_agent})
-    agent = BlueReactRemoveAgent()
-    run(env, agent, 'Blue', steps)
+    run(env, blue_agent, 'Blue', args.steps)
