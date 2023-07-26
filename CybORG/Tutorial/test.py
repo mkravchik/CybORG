@@ -6,39 +6,11 @@ import argparse
 import sys
 from CybORG import CybORG
 from CybORG.Simulator.Scenarios import FileReaderScenarioGenerator
-from CybORG.Agents import B_lineAgent, KillchainAgent, RedMeanderAgent, BlueReactRemoveAgent, BlueReactRestoreAgent, HeuristicRed
-from CybORG.Agents.Wrappers import RedTableWrapper, BlueTableWrapper, TrueTableWrapper
+from CybORG.Agents import B_lineAgent, KillchainAgent, RedMeanderAgent, \
+    BlueReactRemoveAgent, BlueReactRestoreAgent, HeuristicRed, MonitorAgent, \
+    SleepAgent, WinRedMeanderAgent, LinRedMeanderAgent 
+
 from CybORG.Agents.Wrappers.TrueTableWrapper import true_obs_to_table
-
-# def step_red(obs, verbose=True):
-#     action = agent.get_action(obs,action_space)
-#     results = env.step(action=action,agent='Red')
-#     obs = results.observation
-    
-#     if verbose:
-#         print('Red Action:',action)
-#         print(76*'-')
-#         pprint(obs)
-    
-#     return results
-
-# results = env.reset(agent='Red')
-# obs = results.observation
-# pprint(obs)
-# blue_obs = env.get_observation('Blue')
-# print("Blue Observation: ")
-# print(list(blue_obs.keys()))
-
-# action_space = results.action_space
-# red_obs = results.observation
-# print("Red Observation: ")
-# print(red_obs)
-
-
-# results = step_red(red_obs)
-# red_obs = results.observation
-
-# results = env.reset('Red')
 
 def run(env, agent, agent_color, steps):
     def render_ip_to_hostname(action):
@@ -82,15 +54,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run CybORG')
     parser.add_argument("-s", '--steps', type=int, default=100,
                         help='Number of steps to run')
-    parser.add_argument("-b", "--blue_agent", help="BlueAgent class", default="BlueReactRemoveAgent")
+    parser.add_argument("-b", "--blue_agent", help="BlueAgent class", default="MonitorAgent")
     parser.add_argument("-r", "--red_agent", help="RedAgent class", default="RedMeanderAgent")
 
     args = parser.parse_args()
 
-
     path = inspect.getfile(CybORG)
     path = dirname(path) + f'/Simulator/Scenarios/scenario_files/Scenario1b.yaml'
     sg = FileReaderScenarioGenerator(path)
+
 
     # create blue agent, the name of the class is in args.blue_agent
     blue_agent_class = getattr(sys.modules[__name__], args.blue_agent)

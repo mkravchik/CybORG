@@ -428,11 +428,18 @@ class EnvironmentController(CybORGLogger):
         # returns action if the parameters in the action are in and true in the action set else return InvalidAction imbued with bug report.
         action_space = agent.action_space.get_action_space()
 
-        if type(action) not in action_space['action']:
-            message = f'Action {action} not in action space for agent {agent.agent_name}.'
-            return InvalidAction(action=action, error=message)
+        action_type = type(action)
+        if action_type not in action_space['action']:
+            # check if action is a subclass of a valid action
+            for valid_action in action_space['action']:
+                if isinstance(action, valid_action):
+                    action_type = valid_action
+                    break
+            if action_type ==  type(action):   # if action is not a subclass of a valid action
+                message = f'Action {action} not in action space for agent {agent.agent_name}.'
+                return InvalidAction(action=action, error=message)
 
-        if not action_space['action'][type(action)]:
+        if not action_space['action'][action_type] :
             message = f'Action {action} is not valid for agent {agent.agent_name} at the moment. This usually means it is trying to access a host it has not discovered yet.'
             return InvalidAction(action=action, error=message)
 

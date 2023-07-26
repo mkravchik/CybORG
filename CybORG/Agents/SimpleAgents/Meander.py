@@ -1,7 +1,7 @@
 from CybORG.Agents.SimpleAgents.BaseAgent import BaseAgent
 from CybORG.Shared import Results
 from CybORG.Simulator.Actions import PrivilegeEscalate, ExploitRemoteService, DiscoverRemoteSystems, Impact, \
-    DiscoverNetworkServices
+    DiscoverNetworkServices, WinPrivilegeEscalate, LinPrivilegeEscalate
 
 
 class RedMeanderAgent(BaseAgent):
@@ -15,6 +15,7 @@ class RedMeanderAgent(BaseAgent):
         self.host_ip_map = {}
         self.last_host = None
         self.last_ip = None
+        self.privilege_escalate = PrivilegeEscalate
 
     def train(self, results: Results):
         """allows an agent to learn a policy"""
@@ -79,7 +80,7 @@ class RedMeanderAgent(BaseAgent):
                 continue
             self.escalated_hosts.append(hostname)
             self.last_host = hostname
-            return PrivilegeEscalate(hostname=hostname, agent='Red', session=session)
+            return self.privilege_escalate(hostname=hostname, agent='Red', session=session)
 
         # access unexploited hosts
         for address in addresses:
@@ -104,3 +105,23 @@ class RedMeanderAgent(BaseAgent):
 
     def set_initial_values(self, action_space, observation):
         pass
+
+"""
+    Windows-only agent that meanders through the network
+    Can perform priviledge escalation only on Windows hosts
+    Inherites from RedMeanderAgent, just uses different priviledge escalation action
+"""
+class WinRedMeanderAgent(RedMeanderAgent):
+    def __init__(self, np_random = None):
+        super().__init__(np_random)
+        self.privilege_escalate = WinPrivilegeEscalate
+
+"""
+    Linux-only agent that meanders through the network
+    Can perform priviledge escalation only on Linux hosts
+    Inherites from RedMeanderAgent, just uses different priviledge escalation action
+"""
+class LinRedMeanderAgent(RedMeanderAgent):
+    def __init__(self, np_random = None):
+        super().__init__(np_random)
+        self.privilege_escalate = LinPrivilegeEscalate

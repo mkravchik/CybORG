@@ -6,5 +6,5 @@ from .Analyse import Analyse
 from .Remove import Remove
 from .Restore import Restore
 from .Misinform import Misinform
-from .PrivilegeEscalate import PrivilegeEscalate
+from .PrivilegeEscalate import PrivilegeEscalate, WinPrivilegeEscalate, LinPrivilegeEscalate
 from .Impact import Impact

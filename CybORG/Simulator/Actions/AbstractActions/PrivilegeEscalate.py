@@ -51,6 +51,34 @@ class DefaultEscalateActionSelector(EscalateActionSelector):
 _default_escalate_action_selector = DefaultEscalateActionSelector()
 
 
+class WinEscalateActionSelector(EscalateActionSelector):
+    """
+    Attempts to use Juicy Potato if windows, otherwise V4l2 kernel
+    """
+    def get_escalate_action(self, *, state: State, session: int, target_session: int,
+            agent: str, hostname: str) -> \
+                    Optional[EscalateAction]:
+        if hostname in state.sessions[agent][session].operating_system:
+            if state.sessions[agent][session].operating_system[hostname] == OperatingSystemType.WINDOWS:
+                return JuicyPotato(session=session, target_session=target_session,
+                        agent=agent)
+
+        return None
+
+
+class LinEscalateActionSelector(EscalateActionSelector):
+    """
+    Attempts to use Juicy Potato if windows, otherwise V4l2 kernel
+    """
+    def get_escalate_action(self, *, state: State, session: int, target_session: int,
+            agent: str, hostname: str) -> \
+                    Optional[EscalateAction]:
+        if hostname in state.sessions[agent][session].operating_system:
+            if state.sessions[agent][session].operating_system[hostname] == OperatingSystemType.LINUX:
+                return V4L2KernelExploit(session=session, target_session=target_session,
+                            agent=agent)
+        return None
+
 class PrivilegeEscalate(Action):
     """Selects and executes a privilege escalation action on a host"""
     def __init__(self, hostname: str, session: int, agent: str):
@@ -143,3 +171,24 @@ class PrivilegeEscalate(Action):
                 )
 
         return all(equality_tuple)
+
+""" 
+    Windows-only privilege escalation 
+    Inherits from PrivilegeEscalate, just uses a different escalate action selector
+"""
+class WinPrivilegeEscalate(PrivilegeEscalate):
+    def __init__(self, hostname: str, session: int, agent: str):
+        super().__init__(hostname, session, agent)
+        self.escalate_action_selector = WinEscalateActionSelector()
+
+"""
+    Linux-only privilege escalation
+    Inherits from PrivilegeEscalate, just uses a different escalate action selector
+"""
+class LinPrivilegeEscalate(PrivilegeEscalate):
+    def __init__(self, hostname: str, session: int, agent: str):
+        super().__init__(hostname, session, agent)
+        self.escalate_action_selector = LinEscalateActionSelector()
+
+        
+                
