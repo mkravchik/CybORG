@@ -16,6 +16,7 @@ class HeuristicRed(BaseAgent):
         self.last_action = None
         self.history = []
         self.active_ip = None
+        self.exploit_failures = {}
 
         self.known_subnets = set()
         self.unexplored_subnets = set()
@@ -58,6 +59,15 @@ class HeuristicRed(BaseAgent):
             self.ip_status[ip] = 1
         elif name == 'ExploitRemoteService':
             # host may be Defender or attack may have randomly failed
+            ip = action.ip_address
+            if ip not in self.exploit_failures:
+                self.exploit_failures[ip] = 1
+            else:
+                self.exploit_failures[ip] += 1
+                if self.exploit_failures[ip] > 5:
+                    self.ip_status[ip] = 100 # Exploit failed too many times
+                    if self.active_ip == ip:
+                        self.active_ip = None                     
             pass
         else:
             raise NotImplementedError('Scans are not supposed to fail.')
