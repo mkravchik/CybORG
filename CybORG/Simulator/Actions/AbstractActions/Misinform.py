@@ -142,7 +142,8 @@ class Misinform(Action):
     Creates a misleading process on the designated host depending on
     available and compatible options.
     """
-    def __init__(self, *, session: int, agent: str, hostname: str):
+    # def __init__(self, *, session: int, agent: str, hostname: str):
+    def __init__(self, session: int, agent: str, hostname: str):
         super().__init__()
         self.agent = agent
         self.session = session
