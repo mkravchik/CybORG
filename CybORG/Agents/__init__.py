@@ -6,6 +6,7 @@ from CybORG.Agents.SimpleAgents.KillchainAgent import KillchainAgent
 from CybORG.Agents.SimpleAgents.GreenAgent import GreenAgent
 from CybORG.Agents.SimpleAgents.TestFlatFixed import TestFlatFixedAgent
 from CybORG.Agents.SimpleAgents.BlueReactAgent import BlueReactRemoveAgent,BlueReactRestoreAgent
+from CybORG.Agents.SimpleAgents.BlueLoadAgent import BlueLoadAgent
 from CybORG.Agents.SimpleAgents.KeyboardAgent import KeyboardAgent
 from CybORG.Agents.SimpleAgents.BlueReactAgent import BlueReactRemoveAgent,BlueReactRestoreAgent
 from CybORG.Agents.SimpleAgents.KeyboardAgent import KeyboardAgent

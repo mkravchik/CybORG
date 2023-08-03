@@ -45,8 +45,8 @@ class StopProcess(LocalAction):
             service = False
         if session is not None:
             host.sessions[agent].remove(session)
-            state.sessions[agent].pop(session)
+            session = state.sessions[agent].pop(session)
             if service:
-                session_reloaded = state.add_session(host=host.hostname, user=session.user,
+                session_reloaded = state.add_session(host=host.hostname, user=session.username,
                                                     session_type=session.session_type, agent=session.agent,
                                                     parent=session.parent, timeout=session.timeout)

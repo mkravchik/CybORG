@@ -112,7 +112,7 @@ class TrueTableWrapper(BaseWrapper):
         return self.get_attr('get_rewards')()
 
 def true_obs_to_table(true_obs,env):
-    print('Scanned column likely inaccurate.')
+    # print('Scanned column likely inaccurate.')
     wrapper = TrueTableWrapper(env,observer_mode=False)
     wrapper.step_counter = 1
     return wrapper.observation_change(agent=None, observation=true_obs)

@@ -70,7 +70,9 @@ class HeuristicRed(BaseAgent):
                         self.active_ip = None                     
             pass
         else:
-            raise NotImplementedError('Scans are not supposed to fail.')
+            # encountered during learning. Have no idea what to do
+            # raise NotImplementedError('Scans are not supposed to fail.')
+            pass
 
     def _process_new_ips(self,obs):
         for hostid in obs:
@@ -102,8 +104,7 @@ class HeuristicRed(BaseAgent):
             action = DiscoverRemoteSystems(subnet=subnet,**self.parameters)
         else:
 
-            ip = self._choose_ip()
-            
+            ip = self._choose_ip()            
             action = self._choose_exploit(ip)
             if ip not in self.ip_status:
                 self.ip_status[ip] = 0

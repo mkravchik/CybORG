@@ -1,5 +1,5 @@
 #!/bin/bash
-# Parameters: $1 = output file name, $2 = Blue agent, $3 = Red agent, $4 = number of episodes
+# Parameters: $1 = output file name, $2 = Blue agent, $3 = Red agent, $4 = number of steps
 
 # Remove the output file if it exists
 if [ -f $1 ]; then
